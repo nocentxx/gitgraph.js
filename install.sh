@@ -1,30 +1,39 @@
 #!/bin/bash
 
-# remove old version
-sudo rm -rf ~/.npm
-sudo rm -rf /usr/local/bin/npm
-sudo rm -rf /usr/local/share/man/man1/node*
-sudo rm -rf /usr/local/share/doc/node*
-sudo rm -rf /usr/local/lib/node*
-sudo rm -rf /usr/local/bin/node*
-sudo rm -rf /usr/local/include/node*
+uid=$(id -u)
+if [ ${uid} -ne 0 ]; then
+    SUDO="sudo"
+fi
 
-sudo apt-get purge nodejs npm
-sudo apt autoremove
+# remove old version
+${SUDO} rm -rf ~/.npm
+${SUDO} rm -rf /usr/local/bin/npm
+${SUDO} rm -rf /usr/local/share/man/man1/node*
+${SUDO} rm -rf /usr/local/share/doc/node*
+${SUDO} rm -rf /usr/local/lib/node*
+${SUDO} rm -rf /usr/local/bin/node*
+${SUDO} rm -rf /usr/local/include/node*
+
+${SUDO} apt-get purge nodejs npm
+${SUDO} apt autoremove
 
 # install new version
 version="18.17.1"
 tar -xf node-v${version}-linux-x64.tar.xz
-sudo mv node-v${version}-linux-x64/bin/* /usr/local/bin/
-sudo mv node-v${version}-linux-x64/lib/node_modules /usr/local/lib
-sudo mv node-v${version}-linux-x64/include/node /usr/local/include/
-sudo mv node-v${version}-linux-x64/share/doc/node /usr/local/share/doc
-sudo mv node-v${version}-linux-x64/share/man/man1/node* /usr/local/share/man/man1/
-sudo mv node-v${version}-linux-x64/share/systemtap/tapset/node* /usr/local/share/systemtap/tapset/
+${SUDO} mv node-v${version}-linux-x64/bin/* /usr/local/bin/
+${SUDO} mv node-v${version}-linux-x64/lib/node_modules /usr/local/lib
+${SUDO} mv node-v${version}-linux-x64/include/node /usr/local/include/
+${SUDO} mv node-v${version}-linux-x64/share/doc/node /usr/local/share/doc
+${SUDO} mv node-v${version}-linux-x64/share/man/man1/node* /usr/local/share/man/man1/
+${SUDO} mv node-v${version}-linux-x64/share/systemtap/tapset/node* /usr/local/share/systemtap/tapset/
 
 rm -rf node-v${version}-linux-x64
 
 node -v
 npm -v
 
-${SUDO} install yarn
+npm install npm-run-all
+npm install --g lerna
+npm install --g yarn
+npm install --g rimraf
+npm install --g typescript
